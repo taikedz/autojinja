@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from autojinja import process_template
+from autojinja import render_template
 import sys
 
 if len(sys.argv) < 2:
@@ -13,10 +13,10 @@ if len(sys.argv) < 3:
     # No extra arguments supplied, user is querying the template
     # This will raise its own error
     sys.argv = [""]
-    process_template(template_file, [])
+    render_template(template_file, [])
     exit()
 
 # Remove the executable and the template from the command list so it does not appear in the help
 sys.argv = [""] + sys.argv[2:]
 
-print( process_template(template_file, sys.argv[1:]) ) # From 1, because we walloped an argument
+render_template(template_file, sys.argv[1:]) # From 1, because we walloped an argument

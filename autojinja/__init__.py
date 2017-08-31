@@ -73,8 +73,8 @@ def combine(path, supplied_args):
 
     return output
 
-def process_template(path, supplied_args):
+def render_template(path, supplied_args):
     args,lines = get_template_args(path, supplied_args)
     template = Template( "".join(lines) )
 
-    return template.render(**args)
+    print template.render(**args)
