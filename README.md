@@ -100,4 +100,4 @@ With `render_template`, if the arguments supplied do not meet all requirements, 
 With `combine`, the rendered text is simply returned; if there was an error, a ValueError is raised, and the error message is silenced.
 
 	import autojinja
-	autojinja.combine("path/to/template", ["-l", list of arguments", "-w", "with their argument identifiers"])
+	rendered_template = autojinja.combine("path/to/template", ["-l", list of arguments", "-w", "with their argument identifiers"])
