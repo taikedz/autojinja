@@ -1,0 +1,24 @@
+#:r -n servicename      The name of the service
+#:r -c commandstring    The command string, with full path to command
+#:r -d description      The service descirption
+
+#:o -a after            Target after which to start (default network.target)
+#:o -u username         The user to run the service as (default nobody)
+#:o -r restart          The restart mode (default on-failure)
+#:o -w wantedby         The wantedby parameter, default unspecified
+
+[Unit]
+
+Description={{description}}
+After={{after|default("network.target",true)}}
+
+[Service]
+ExecStart={{commandstring}}
+User={{username|default("nobody",true)}}
+Restart={{restart|default("on-failure",true)}}
+PIDFile=/run/{{servicename}}.pid
+
+{% if wantedby %}
+[Install]
+WantedBy={{wantedby}}
+{% endif %}
