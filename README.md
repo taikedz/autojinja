@@ -93,11 +93,11 @@ Due to the use of the `argparse` library to support dynamically creating argumen
 You can use autojinja as a python library:
 
 	import autojinja
-	autojinja.render_template("path/to/template", ["-l", list of argumentsf", "-w", "with their argument identifiers"])
+	autojinja.print_template("path/to/template", ["-l", list of arguments", "-w", "with their argument identifiers"])
 
-With `render_template`, if the arguments supplied do not meet all requirements, the help will be printed to stderr, and the program will exit.
+With `print_template`, if the arguments supplied do not meet all requirements, the help will be printed to stderr, and the program will exit.
 
-With `combine`, the rendered text is simply returned; if there was an error, a ValueError is raised, and the error message is silenced.
+With `render_template`, the rendered text is simply returned; if there was an error, a ValueError is raised, and the error message is silenced.
 
 	import autojinja
-	rendered_template = autojinja.combine("path/to/template", ["-l", list of arguments", "-w", "with their argument identifiers"])
+	rendered_template = autojinja.render_template("path/to/template", ["-l", list of arguments", "-w", "with their argument identifiers"])
