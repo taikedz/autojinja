@@ -43,7 +43,7 @@ Given this nagios template file in `./nagios-service.template`:
 		check_command			check-host-alive
 	{% if contacts %}
 		contacts                        {{contacts}} {% endif %}
-	{% if contact_groups %}
+	{% if contactgroups %}
 		contact_groups			{{contactgroups}} {% endif %}
 	{% if notesurl %}
 		notes_url			{{notesurl}} {% endif %}
