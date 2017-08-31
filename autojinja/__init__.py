@@ -5,13 +5,6 @@ import sys
 import re
 import argparse
 
-def get_template_args(path, supplied_args):
-    fh = open(path)
-    lines = fh.readlines()
-    fh.close()
-
-    return args_from_lines(lines, supplied_args)
-
 def is_blank(line):
     return None != re.match("^(\\s*)$", line)
 
@@ -25,6 +18,13 @@ def is_required(character):
         return False
 
     raise ValueError("Error in template definition: %s is not a valid requirement state"%character)
+
+def get_template_args(path, supplied_args):
+    fh = open(path)
+    lines = fh.readlines()
+    fh.close()
+
+    return args_from_lines(lines, supplied_args)
 
 def args_from_lines(lines, supplied_args):
     argsp = argparse.ArgumentParser()
@@ -46,12 +46,31 @@ def args_from_lines(lines, supplied_args):
 
         argsp.add_argument(marker, "--"+varname, help=description, required=required)
 
-    return argsp.parse_args(supplied_args).__dict__,lines[i:]
+    return argsp.parse_args(supplied_args).__dict__ , lines[i:]
+
+class StringCollector:
+
+    def __init__(self):
+        self.strings = []
+
+    def write(self, newstring):
+        self.strings.append(newstring)
+
+    def writelines(self, stringlist):
+        self.strings.extend(stringlist)
+
+    def __str__(self):
+        return "".join(self.strings )
+
+    def close(self):
+        return True
 
 def render_template(path, supplied_args):
+    # We want to catch the stderr output
+    # we shim a fake stderr temporarily
     oldstderr = sys.stderr
-    nullhandler = open("/dev/null", "w") # FIXME this needs to be something we can read from, to get back the error emssage
-    sys.stderr = nullhandler
+    collector = StringCollector()
+    sys.stderr = collector
     output = ""
     err = None
 
@@ -59,22 +78,20 @@ def render_template(path, supplied_args):
         args,lines = get_template_args(path, supplied_args)
         template = Template("".join(lines))
 
-        output = template.render(**args)
+        output = template.render(args)
     except SystemExit as e:
-        err = ValueError("Renderer returned err %i with no message."%e)
+        # Unlike the general case, this section may produce an error
+        # (bad data passed to the collector possible?), so we
+        # reinstate the real stderr asap
+        sys.stderr = oldstderr
+
+        err = ValueError( collector )
     except Exception as e:
         err = e
 
-    nullhandler.close()
     sys.stderr = oldstderr
 
     if err:
         raise err
 
     return output
-
-def print_template(path, supplied_args):
-    args,lines = get_template_args(path, supplied_args)
-    template = Template( "".join(lines) )
-
-    print template.render(**args)

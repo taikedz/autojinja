@@ -2,11 +2,16 @@
 
 A tool to process jinja2 templates that define their own arguments. 
 
-## Install
+Typical use case would be processing collections of configs that each require different treatment; rather than have the requirement logic in the program, move it to the template and pass the user arguments along.
+
+## Install as a command
 
 Rerquires a Linux/UNIX environment.
 
-Add the `autojinja/` directory to your `PYTHONPATH`, and the `bin/` directory to your `PATH` (or, copy these to directories in the respective paths)
+	git clone https://github.com/taikedz/autojinja
+	autojinja/install.sh
+
+Run the install step as root to make autojinja available to all.
 
 ## Example
 
@@ -16,7 +21,7 @@ Example direct usage:
 
 The above will print the arguments that the template `technician.txt` requires for being populated, to stderr.
 
-	PYTHONPATH=./ bin/autojinja examples/technician.txt -n Guido -l "python, c"
+	autojinja examples/technician.txt -n Guido -l "python, c"
 
 The above will render the template to stdout.
 
@@ -51,7 +56,7 @@ Given this nagios template file in `./nagios-service.template`:
 
 we can run
 	
-	PYTHONPATH=. bin/autojinja examples/nagios-host.cfg -n host -a addr
+	autojinja examples/nagios-host.cfg -n host -a addr
 
 which will output:
 
@@ -92,12 +97,13 @@ Due to the use of the `argparse` library to support dynamically creating argumen
 
 You can use autojinja as a python library:
 
-	import autojinja
-	autojinja.print_template("path/to/template", ["-l", list of arguments", "-w", "with their argument identifiers"])
-
-With `print_template`, if the arguments supplied do not meet all requirements, the help will be printed to stderr, and the program will exit.
-
-With `render_template`, the rendered text is simply returned; if there was an error, a ValueError is raised, and the error message is silenced.
+The `render_template` function performs a jinja2 rendering; if there was an error, a ValueError is raised, containing a help message specifying the expected arguments pattern, as well as the first missing argument identified.
 
 	import autojinja
-	rendered_template = autojinja.render_template("path/to/template", ["-l", list of arguments", "-w", "with their argument identifiers"])
+	
+	try:
+		rendered_template = autojinja.render_template("path/to/template",
+							     ["-l", list of arguments",
+							     "-w", "with their argument identifiers"])
+	except ValueError as e:
+		print(e)
