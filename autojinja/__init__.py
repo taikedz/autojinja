@@ -31,11 +31,13 @@ def args_from_lines(lines, supplied_args):
     i = 0
     for line in lines:
         tokens = arg_tokens_of(line)
-        if not tokens:
-            if is_blank(line):
-                continue
+
+        if not tokens and not is_blank(line):
             break
+
         i = i+1
+        if is_blank(line):
+            continue
 
         required    = is_required(tokens.group(1))
         marker      = tokens.group(2)
