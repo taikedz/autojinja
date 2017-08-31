@@ -11,7 +11,7 @@ add_pypath() {
 			return
 		fi
 	fi
-	echo "PYTHONPATH=\"\$PYTHONPATH:$path_to_add\"" >> "$rcfile"
+	echo "export PYTHONPATH=\"\$PYTHONPATH:$path_to_add\"" >> "$rcfile"
 }
 
 add_autojinja_lib() {
@@ -43,7 +43,7 @@ get_dest_bin() {
 
 get_dest_rc() {
 	if [[ "$UID" = 0 ]]; then
-		echo "/etc/bashrc"
+		echo "/etc/bash.bashrc"
 	else
 		echo "$HOME/.bashrc"
 	fi
@@ -55,4 +55,4 @@ thepath="$(get_dest_path)"
 add_autojinja_lib "$thepath"
 add_pypath "$(get_dest_rc)" "$thepath"
 
-ln -s "$maindir/autojinja.py" "$(get_dest_bin)/autojinja"
+ln -s "$thepath/$maindir/run-autojinja" "$(get_dest_bin)/autojinja"
