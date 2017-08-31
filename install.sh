@@ -46,4 +46,4 @@ thepath="$(get_dest_path)"
 add_autojinja_lib "$thepath"
 add_pypath "$(get_dest_rc)" "$thepath"
 
-ln -s "$thepath/$maindir/autojinja.py" /usr/bin/autojinja
+ln -s "$maindir/autojinja.py" "$thepath/autojinja"
