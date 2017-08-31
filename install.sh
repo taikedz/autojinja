@@ -32,6 +32,14 @@ get_dest_path() {
 	fi
 }
 
+get_dest_bin() {
+	if [[ "$UID" = 0 ]]; then
+		echo "/usr/bin"
+	else
+		echo "$HOME/.local/bin"
+	fi
+}
+
 get_dest_rc() {
 	if [[ "$UID" = 0 ]]; then
 		echo "/etc/bashrc"
