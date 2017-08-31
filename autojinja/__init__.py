@@ -30,12 +30,12 @@ def args_from_lines(lines, supplied_args):
     argsp = argparse.ArgumentParser()
     i = 0
     for line in lines:
-        i = i+1
         tokens = arg_tokens_of(line)
         if not tokens:
             if is_blank(line):
                 continue
             break
+        i = i+1
 
         required    = is_required(tokens.group(1))
         marker      = tokens.group(2)
@@ -76,15 +76,3 @@ def process_template(path, supplied_args):
     template = Template( "".join(lines) )
 
     return template.render(**args)
-
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Supply a template file to process")
-        sys.exit(1)
-
-    template_file = sys.argv[1]
-
-    # Remove the executable and the template from the command list so it does not appear in the help
-    sys.argv = [""] + sys.argv[2:]
-
-    print( process_template(template_file, sys.argv[1:]) ) # From 1, because we walloped an argument
