@@ -41,20 +41,11 @@ Once a non-header, non-empty line is found, the template proper begins and the h
 You can use autojinja as a python library:
 
 	import autojinja
-	autojinja.process_template("path/to/template", ["list", "of", "arguments"])
+	autojinja.process_template("path/to/template", ["-l", list of argumentsf", "-w", "with their argument identifiers"])
 
-If the arguments supplied do not meet all requirements, the help will be printed, and the program will exit - a side effect of using the `argsparse` library.
+With `process_template`, if the arguments supplied do not meet all requirements, the help will be printed, and the program will exit.
 
-You can prevent exiting by catching the `SystemExit` exception. To prevent the error from being output to console, override `stderr`.
+With `combine`, the rendered text is simply returned; if there was an error, the output is silenced.
 
 	import autojinja
-	import sys
-	
-	oldstderr = sys.stderr
-	sys.stderr = None
-	try:
-		autojinja.process_template("path/to/template", ["list", "of", "arguments"])
-	except SystemExit:
-		# deal with it
-	
-	sys.stderr = oldstderr
+	autojinja.combine("path/to/template", ["-l", list of arguments", "-w", "with their argument identifiers"])

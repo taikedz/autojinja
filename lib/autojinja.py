@@ -46,6 +46,31 @@ def args_from_lines(lines, supplied_args):
 
     return argsp.parse_args(supplied_args).__dict__,lines[i:]
 
+def combine(path, supplied_args):
+    oldstderr = sys.stderr
+    nullhandler = open("/dev/null", "w") # FIXME this needs to be something we can read from, to get back the error emssage
+    sys.stderr = nullhandler
+    output = ""
+    err = None
+
+    try:
+        args,lines = get_template_args(path, supplied_args)
+        template = Template("".join(lines))
+
+        output = template.render(**args)
+    except SystemExit as e:
+        err = ValueError("Renderer returned err %i with no message."%e)
+    except Exception as e:
+        err = e
+
+    nullhandler.close()
+    sys.stderr = oldstderr
+
+    if err:
+        raise err
+
+    return output
+
 def process_template(path, supplied_args):
     args,lines = get_template_args(path, supplied_args)
     template = Template( "".join(lines) )
