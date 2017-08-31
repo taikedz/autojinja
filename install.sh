@@ -36,6 +36,7 @@ get_dest_bin() {
 	if [[ "$UID" = 0 ]]; then
 		echo "/usr/bin"
 	else
+		mkdir -p "$HOME/.local/bin"
 		echo "$HOME/.local/bin"
 	fi
 }
