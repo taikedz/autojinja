@@ -19,6 +19,12 @@ Run it on a parameterised template - for example
 
 which will print the expanded template to stdout.
 
+## Install as a library
+
+Linux, Mac and Windows.
+
+Clone the autojinja repository to a location on your `PYTHONPATH`.
+
 ### Template example
 
 Given this nagios template file in `./nagios-host.template`:
