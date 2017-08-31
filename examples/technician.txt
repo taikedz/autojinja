@@ -1,7 +1,0 @@
-#:r -n name The name of the person
-#:o -j job The person's job
-#:r -l languages The languages the person can use
-
-I am {{name}} and I am a {{job|default("technician",true)}}.
-
-I can write {{languages}}
