@@ -13,21 +13,15 @@ Rerquires a Linux/UNIX environment.
 
 Run the install step as root to make autojinja available to all.
 
-## Example
+Run it on a parameterised template - for example
 
-Example direct usage:
+	autojinja examples/nagios-host.template -n example -a example.com -d "Example.com server"
 
-	PYTHONPATH=./ bin/autojinja examples/technician.txt
-
-The above will print the arguments that the template `technician.txt` requires for being populated, to stderr.
-
-	autojinja examples/technician.txt -n Guido -l "python, c"
-
-The above will render the template to stdout.
+which will print the expanded template to stdout.
 
 ### Template example
 
-Given this nagios template file in `./nagios-service.template`:
+Given this nagios template file in `./nagios-host.template`:
 
 	#:r -n name              The shortname for the host, to use in nagios
 	#:r -a address           The IP or FQDN of the host
@@ -78,7 +72,9 @@ Simply running without arguments will complain about missing mandatory arguments
 
 ## Template Header Syntax
 
-The template must specify at the top of the file the arguments it expects, as 4 fields:
+The template header is a series of lines starting either with `#:o` or `#:r`; these are the specification lines. There must be no lines above the header.
+
+Header lines are composed of 4 fields:
 
 * `#:r` or `#:o` - defining whether the the argument is required, or optional
 * an argument identifier, e.g. `-n`
